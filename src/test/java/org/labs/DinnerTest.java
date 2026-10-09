@@ -33,10 +33,12 @@ class DinnerTest {
 
         assertEquals(programmerCount, eatenPortions.length);
         assertEquals(portionCount, Arrays.stream(eatenPortions).sum(), "съеден ровно весь запас");
-        long smallestShare = Arrays.stream(eatenPortions).min().orElseThrow();
-        long largestShare = Arrays.stream(eatenPortions).max().orElseThrow();
-        assertTrue(largestShare - smallestShare <= 1,
-                "съедено от " + smallestShare + " до " + largestShare + ", а разница должна быть не больше одной порции");
+        for (int seat = 0; seat < programmerCount; seat++) {
+            int neighbourSeat = (seat + 1) % programmerCount;
+            assertTrue(Math.abs(eatenPortions[seat] - eatenPortions[neighbourSeat]) <= 1,
+                    "соседи " + seat + " и " + neighbourSeat + " съели " + eatenPortions[seat] + " и "
+                            + eatenPortions[neighbourSeat] + ", а разница должна быть не больше одной порции");
+        }
     }
 
     @RepeatedTest(50)
